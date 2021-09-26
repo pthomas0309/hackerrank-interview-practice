@@ -28,61 +28,64 @@ function sockMerchant(n, ar) {
     // ar is an array of integers
     // that represent sock colors
     // ar.length = n
-    const unpairedSocks = ar;
+    const sockPile = ar;
     
-    // sockDrawer is a object that
-    // keeps track of the amount of matched socks
+    /* sockDrawer object stores: an array containing 
+    each iteration of color in sockPile and the number of
+    socks matched by color */
     let sockDrawer = { 
         socksByColor: [],
         pairedSocks: 0
     };
     
-    // loop through the array of 
-    // socks to look for duplicates
-    for (let i = 0; i < unpairedSocks.length; i++) {
+    // loop through sockPile
+    for (let i = 0; i < sockPile.length; i++) {
         
-        /* conditional verifies if the value
-        at the index exists in the object */
+        /* If/Else block will check sockDrawer obj for a
+        key matching the value of the array at the current index  */
         
         // case: the value at the index is not                
-        // tracked in the object
-        if (sockDrawer[unpairedSocks[i]] === undefined){
+        // stored in the object
+        if (sockDrawer[sockPile[i]] === undefined){
             console.log('in if')
             
-            // map the first occurance of value in 
-            // array to compare against other indices
-            sockDrawer[unpairedSocks[i]] = 1;
+            // map the first occurance of this value
+            // as a key in sockDrawer with the value 1
+            sockDrawer[sockPile[i]] = 1;
             
-            // push the value into the socksByColor
-            // array for a list of every sock color
-            // that exists in ar
-            sockDrawer.socksByColor.push(unpairedSocks[i]);
+            // create a seperate array of the colors 
+            // in sockPile that is without duplicates
+            sockDrawer.socksByColor.push(sockPile[i]);
         } // end if
         
-        // case: the value at the index occurs
-        // in the object
+        // case: the value at the index already
+        // appears in the sockDrawer (duplicate)
         else {
             console.log('in else')
             
             // add one to the count of socks matching
-            // the current color
-            sockDrawer[unpairedSocks[i]] += 1;
+            // the color at the current index
+            sockDrawer[sockPile[i]] += 1;
+
         } // end else
+
     }; // end unpairedSocks loop
     
-    // duplicates are now tracked in the object
-    // loop through the array without duplicates
-    // to do the math to find the pairs 
+    /* loop through socksByColor to calculate
+    number of sock pairs by each color that
+    appears in sockPile */
     for (let i = 0; i < sockDrawer.socksByColor.length; i++) {
         
-        // locate the count of the socks stored 
-        // in the object using the index of the loop
-        // and update the count of pairs
+        /* pairs variable takes the value of socksByColor 
+        at the current index that matches the key of sockDrawer
+        and divides the paired value by two, 
+        rounding the value down */
         const pairs = Math.floor(sockDrawer[sockDrawer.socksByColor[i]] / 2);
         
-        // add the number of pairs in this color
-        // to the number of total pairs
+        // add the amount of pairs of the current 
+        // color value to the number of total pairs
         sockDrawer.pairedSocks += pairs;
+        
     } // end socksByColor loop
 
     // return the total number of paired socks
